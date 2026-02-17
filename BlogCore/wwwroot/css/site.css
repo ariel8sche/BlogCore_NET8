@@ -20,3 +20,67 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#tblCategorias, #tblArticulos {
+    /* Quitar table-layout: fixed o eliminar !important para que DataTables aplique sus anchos */
+    table-layout: auto; /* o simplemente eliminar esta regla */
+    width: 100%;
+}
+
+#tblArticulos thead th,
+#tblCategorias thead th {
+    border-top: 1px solid #dee2e6;
+}
+
+#tblCategorias th,
+#tblCategorias td {
+    /* Quitar nowrap si quieres que el texto se adapte a la anchura */
+    /* white-space: nowrap; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Separación general del DataTable */
+.dataTables_wrapper {
+    margin-top: 1.5rem;
+}
+
+/* Separar buscador y selector de entradas */
+.dataTables_length,
+.dataTables_filter {
+    margin-bottom: 1rem;
+}
+
+/* Separar tabla de la info inferior */
+.dataTables_info {
+    margin-top: 1rem;
+}
+
+/* Separar paginación */
+.dataTables_paginate {
+    margin-top: 0.75rem;
+}
+
+/*Banner*/
+.banner-container {
+    position: relative;
+    height: 70vh;
+    overflow: hidden;
+    background: url('../imagenes/star-wars-hd-wallpaper.jpg') center no-repeat;
+    background-size: cover;
+}
+
+.banner-content{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.subscribe-btn {
+    padding: 15px 30px;
+    font-size: 24px;
+    border-radius: 14px;
+}

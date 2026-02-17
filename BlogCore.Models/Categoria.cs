@@ -9,6 +9,11 @@ namespace BlogCore.Models
 {
     public class Categoria
     {
+        public Categoria()
+        {
+            FechaCreacion = DateTime.Now;
+        }
+        
         [Key]
         public int Id { get; set; }
 

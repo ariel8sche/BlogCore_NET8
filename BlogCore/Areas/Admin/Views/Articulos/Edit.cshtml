@@ -1,0 +1,121 @@
+﻿@model BlogCore.Models.ViewModels.ArticuloVM;
+
+@{
+    ViewData["Title"] = "Edit Artículo";
+}
+
+@* 
+PSEUDOCÓDIGO / PLAN (detallado):
+1. Detectar la causa por la que SimpleMDE no inicializa:
+   - Comprobar que el id usado en document.getElementById coincide exactamente con el id del textarea.
+   - Comprobar que el textarea tenga el name correcto para el binding (no sobrescribir el name producido por asp-for).
+   - Asegurarse de que el script de inicialización se ejecute después de que el DOM esté cargado y después de que se cargue la librería SimpleMDE.
+2. Cambios a aplicar:
+   - Corregir el id del textarea a "Contenido" (estaba mal escrito "Contendio").
+   - Eliminar el atributo name="Contenido" para dejar que asp-for gestione el name y el binding modelo.
+   - Inicializar SimpleMDE dentro de un listener DOMContentLoaded y comprobar que el elemento existe antes de crear la instancia.
+   - Mantener las referencias CDN de CSS y JS de SimpleMDE.
+3. Resultado:
+   - El textarea quedará correctamente enlazado con el modelo y SimpleMDE se inicializará sin errores de null.
+*@
+
+<br />
+<br />
+<h2 class="text-center">Editar un Artículo</h2>
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
+
+    <!-- Se envia el ID del articulo como campo oculto-->
+    <input type="hidden" asp-for="Articulo.Id" />
+
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="col-8 offset-1 mt-4">
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label asp-for="Articulo.Nombre"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Articulo.Nombre" class="form-control" placeholder="Ingrese el nombre del articulo" />
+                    <span asp-validation-for="Articulo.Nombre" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label asp-for="Articulo.Descripcion"></label>
+                </div>
+                <div class="col-8">
+                    <!-- Corregido: id="Contenido" y removido name para mantener binding correcto -->
+                    <textarea asp-for="Articulo.Descripcion" id="Contenido" class="form-control" style="height: 300px"></textarea>
+                    <span asp-validation-for="Articulo.Descripcion" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label for="Categoria">Categoría</label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(m => m.Articulo.CategoriaId, Model.ListaCategorias,
+                    "-Por favor seleccione una categoría-", new { @class = "form-control" })
+                    <span asp-validation-for="Articulo.Categoria" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label asp-for="Articulo.urlImagen"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" class="form-control" name="archivos" id="subidaArchivo" />
+                    <span asp-validation-for="Articulo.urlImagen" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group-row mt-3 mb-3">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary form-control">Editar</button>
+                        </div>
+                        &nbsp;
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success form-control">Volver atrás</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col pt-3">
+                <img src="@Model.Articulo.urlImagen" width="300" style="border-radius: 5px; border: 1px solid #bbb9b9" />
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
+    <script>
+        // Inicializar SimpleMDE de forma segura cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            var textarea = document.getElementById('Contenido');
+            if (textarea && typeof SimpleMDE !== 'undefined') {
+                try {
+                    new SimpleMDE({ element: textarea });
+                } catch (e) {
+                    console.error('Error al inicializar SimpleMDE:', e);
+                }
+            } else {
+                if (!textarea) console.warn('Textarea con id "Contenido" no encontrado.');
+                if (typeof SimpleMDE === 'undefined') console.warn('SimpleMDE no está cargado.');
+            }
+        });
+    </script>
+}

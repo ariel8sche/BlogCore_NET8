@@ -1,0 +1,80 @@
+﻿@model BlogCore.Models.Slider;
+
+@{
+    ViewData["Title"] = "Crear Slider";
+}
+
+<br />
+<br />
+<h2 class="text-center">Crear un nuevo Slider</h2>
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div class="row px-2 offset-1 border">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="col-10 offset-1 mt-4">
+            <div class="form-group row mt-2">
+                <div class="col-4">
+                    <label asp-for="Nombre"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Nombre" class="form-control" placeholder="Ingrese el nombre del articulo" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-4 align-items-center">
+                <div class="col-4">
+                    <label asp-for="Estado" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <div class="form-check form-switch">
+                        <input asp-for="Estado" class="form-check-input" />
+                    </div>
+                    <span asp-validation-for="Estado" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-4">
+                <div class="col-4">
+                    <label asp-for="UrlImagen"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" class="form-control" name="archivos" id="subidaArchivo" />
+                    <span asp-validation-for="UrlImagen" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group-row mt-4 mb-3">
+                <div class="col-8">
+                    <partial name="_VistaCrearVolver" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.js"></script>
+    <script>
+        // Inicializar SimpleMDE de forma segura cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            var textarea = document.getElementById('Contenido');
+            if (textarea && typeof SimpleMDE !== 'undefined') {
+                try {
+                    new SimpleMDE({ element: textarea });
+                } catch (e) {
+                    console.error('Error al inicializar SimpleMDE:', e);
+                }
+            } else {
+                if (!textarea) console.warn('Textarea con id "Contenido" no encontrado.');
+                if (typeof SimpleMDE === 'undefined') console.warn('SimpleMDE no está cargado.');
+            }
+        });
+    </script>
+}
